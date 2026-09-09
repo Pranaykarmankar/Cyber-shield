@@ -1,0 +1,4 @@
+Evaluation Scope,Precision,Recall,F1-Score / Accuracy,Evaluator Summary
+Overall System Accuracy,-,-,99.69%,"Top-line detection rate across 63,946 real packets"
+Weighted Average (Frequency Weighted),0.9967,0.9969,0.9967,Reflects system capability on real-world traffic volume
+Macro Average (Unweighted Class Mean),0.7771,0.7425,0.7557,Reflects unweighted average across all ultra-rare attacks

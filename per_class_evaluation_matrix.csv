@@ -1,0 +1,16 @@
+Attack Class,Real Val Support,Precision,Recall,F1-Score,Detection Reliability Status
+BENIGN,51625,0.998,0.9987,0.9984,Production Ready (High Volume)
+Bot,76,0.68,0.4474,0.5397,Requires Payload Inspection
+DDoS,4562,0.9996,0.9985,0.999,Production Ready (High Volume)
+DoS GoldenEye,113,1.0,0.9735,0.9865,Production Ready (Moderate Sample)
+DoS Hulk,2641,0.9966,0.9894,0.993,Production Ready (High Volume)
+DoS Slowhttptest,66,0.9275,0.9697,0.9481,Production Ready (Moderate Sample)
+DoS slowloris,65,1.0,0.9692,0.9844,Production Ready (Moderate Sample)
+FTP-Patator,146,1.0,1.0,1.0,Production Ready (Moderate Sample)
+Heartbleed,0,0.0,0.0,0.0,No Real Validation Samples
+Infiltration,1,0.0,0.0,0.0,Generative Limit (N < 10)
+PortScan,4438,0.992,0.9998,0.9958,Production Ready (High Volume)
+SSH-Patator,106,1.0,0.9245,0.9608,Production Ready (Moderate Sample)
+Web Attack � Brute Force,73,0.7595,0.8219,0.7895,Requires Payload Inspection
+Web Attack � Sql Injection,1,0.0,0.0,0.0,Generative Limit (N < 10)
+Web Attack � XSS,33,0.5263,0.303,0.3846,Requires Payload Inspection

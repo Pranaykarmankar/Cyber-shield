@@ -1,0 +1,5 @@
+Outcome,Count,Meaning
+True Negative (TN),49043,Normal traffic correctly classified as BENIGN
+False Positive (FP),2582,Normal traffic incorrectly flagged as ATTACK (false alarm)
+False Negative (FN),29591,Attack traffic missed — classified as BENIGN (most dangerous)
+True Positive (TP),22034,Attack traffic correctly detected as ATTACK

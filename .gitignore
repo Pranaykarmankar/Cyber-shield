@@ -1,0 +1,32 @@
+# Python cache and bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.bak
+
+# Virtual Environments
+venv/
+.venv/
+env/
+ENV/
+
+# Jupyter Checkpoints
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/*
+
+# IDE and OS
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Scratch and temporary scripts
+scratch_*
+*.tmp
+
+# Model checkpoint exceeding GitHub 100MB limit
+# rf_model.pkl (~754MB) is trained via cybershield-vae-model.ipynb
+# The primary AE + CyberTransformer pipeline is fully included.
+rf_model.pkl

@@ -1,0 +1,5 @@
+Training Metric,Value
+Reconstruction Loss (MSE) — Epoch 1,0.044238
+Reconstruction Loss (MSE) — Final Epoch,0.002428
+Best Validation Loss,0.001241
+Total Epochs Trained,60.0

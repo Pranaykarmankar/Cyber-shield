@@ -1,0 +1,6 @@
+Metric,Value,Technical Meaning
+Accuracy,0.6884  (68.84%),Overall correct classifications across normal + attack
+Precision,0.8951,Of packets flagged as ATTACK — how many were truly attacks
+Recall,0.4268,Of all real attacks — how many were successfully detected
+F1-Score,0.5780,Harmonic mean of Precision and Recall (primary metric)
+ROC-AUC,0.8234,Area under ROC curve — threshold-independent separability
