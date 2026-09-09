@@ -120,7 +120,7 @@ Evaluated against **63,946 real validation packets** extracted from the **CICIDS
 Reconstruction error distributions, threshold calibration curve, ROC curve, and classification breakdown:
 
 <div align="center">
-  <img src="ae_diagnostics_dashboard.png" alt="Autoencoder Diagnostics" width="850">
+  <img src="evaluations/figures/ae_diagnostics_dashboard.png" alt="Autoencoder Diagnostics" width="850">
 </div>
 
 ---
@@ -129,7 +129,7 @@ Reconstruction error distributions, threshold calibration curve, ROC curve, and 
 Confusion matrix showing separation between benign traffic, denial of service variants, port sweeps, and brute force intrusions:
 
 <div align="center">
-  <img src="intrusion_classifier_confusion_matrix.png" alt="Classifier Confusion Matrix" width="850">
+  <img src="evaluations/figures/intrusion_classifier_confusion_matrix.png" alt="Classifier Confusion Matrix" width="850">
 </div>
 
 ---
@@ -138,7 +138,7 @@ Confusion matrix showing separation between benign traffic, denial of service va
 Reconstruction loss (MSE reduced from 27.15 to 3.86) and KL divergence regularizing the generative latent space:
 
 <div align="center">
-  <img src="cvae_diagnostics_dashboard.png" alt="CVAE Diagnostics Dashboard" width="850">
+  <img src="evaluations/figures/cvae_diagnostics_dashboard.png" alt="CVAE Diagnostics Dashboard" width="850">
 </div>
 
 ---
@@ -147,7 +147,7 @@ Reconstruction loss (MSE reduced from 27.15 to 3.86) and KL divergence regulariz
 Attention map across statistical traffic attributes, highlighting which flow features triggered classification:
 
 <div align="center">
-  <img src="transformer_attention.png" alt="Transformer Attention Heatmap" width="850">
+  <img src="evaluations/figures/transformer_attention.png" alt="Transformer Attention Heatmap" width="850">
 </div>
 
 ---
@@ -173,50 +173,57 @@ CyberShield features a Streamlit SOC management console crafted with custom cybe
 ```text
 Cyber-shield/
 │
-├── cybershield_app.py                   # Ember Shield Streamlit GUI application (v3.0)
+├── app/                                 # Dashboard application
+│   └── cybershield_app.py               # Ember Shield Streamlit GUI application (v3.0)
 │
-├── autoencoder.ipynb                    # PyTorch Tabular Autoencoder training notebook
-├── transformer.ipynb                    # PyTorch CyberTransformer training notebook
-├── cybershield-vae-model.ipynb          # CVAE Generative Model & Random Forest notebook
+├── models/                              # Trained AI models & preprocessors
+│   ├── cybershield_ae.pth               # Trained Autoencoder PyTorch weights
+│   ├── best_ae.pth                      # Best Autoencoder checkpoint
+│   ├── ae_scaler.pkl                    # StandardScaler fitted on AE training set
+│   ├── cybershield_transformer.pth      # Trained CyberTransformer PyTorch weights
+│   ├── best_transformer.pth             # Best CyberTransformer checkpoint
+│   ├── transformer_scaler.pkl           # StandardScaler fitted for Transformer
+│   ├── transformer_label_encoder.pkl    # LabelEncoder mapping 15 attack classes
+│   ├── scaler.pkl                       # StandardScaler for VAE/RF pipeline
+│   ├── label_encoder.pkl                # LabelEncoder for VAE/RF pipeline
+│   └── rf_model.pkl                     # Local Random Forest model (gitignored due to size)
 │
-├── cybershield_ae.pth                   # Trained Autoencoder PyTorch weights
-├── best_ae.pth                          # Best Autoencoder checkpoint
-├── ae_scaler.pkl                        # StandardScaler fitted on AE training set
+├── notebooks/                           # Model research and training notebooks
+│   ├── autoencoder.ipynb                # PyTorch Tabular Autoencoder training notebook
+│   ├── transformer.ipynb                # PyTorch CyberTransformer training notebook
+│   └── cybershield-vae-model.ipynb      # CVAE Generative Model & Random Forest notebook
 │
-├── cybershield_transformer.pth          # Trained CyberTransformer PyTorch weights
-├── best_transformer.pth                 # Best CyberTransformer checkpoint
-├── transformer_scaler.pkl               # StandardScaler fitted for Transformer
-├── transformer_label_encoder.pkl        # LabelEncoder mapping 15 attack classes
+├── data/                                # Sample datasets for evaluation & testing
+│   ├── test_traffic.csv                 # Sample test traffic CSV (ready to upload)
+│   └── cybershield_mixed_traffic.csv    # Mixed attack test traffic CSV
 │
-├── scaler.pkl                           # StandardScaler for VAE/RF pipeline
-├── label_encoder.pkl                    # LabelEncoder for VAE/RF pipeline
+├── scripts/                             # Utility & synthetic data generation scripts
+│   ├── generate_test_csv.py             # Generates 50 realistic CICIDS 2017 test packets
+│   ├── generate_balanced_csv.py         # Generates balanced multi-class test CSV
+│   └── generate_fast_mixed_csv.py       # Rapid mixed traffic generator
 │
-├── generate_test_csv.py                 # Generates 50 realistic CICIDS 2017 test packets
-├── generate_balanced_csv.py             # Generates balanced multi-class test CSV
-├── generate_fast_mixed_csv.py           # Rapid mixed traffic generator
+├── evaluations/                         # Benchmark metrics, logs & diagnostic figures
+│   ├── metrics/                         # Quantitative evaluation matrices
+│   │   ├── overall_system_metrics.csv       # Global benchmark statistics
+│   │   ├── per_class_evaluation_matrix.csv  # Detailed per-class precision, recall, F1
+│   │   ├── ae_detection_performance.csv     # Autoencoder anomaly evaluation metrics
+│   │   ├── ae_confusion_matrix_breakdown.csv# AE confusion matrix values
+│   │   ├── ae_reconstruction_error_stats.csv# Reconstruction error quantiles
+│   │   ├── ae_training_summary.csv          # AE training epoch logs
+│   │   └── cvae_loss_matrix.csv             # CVAE MSE & KL divergence progression
+│   └── figures/                         # Evaluation charts and dashboards
+│       ├── ae_diagnostics_dashboard.png         # AE diagnostic visualizations
+│       ├── cvae_diagnostics_dashboard.png       # CVAE training & distribution plots
+│       ├── intrusion_classifier_confusion_matrix.png # Multi-class confusion matrix plot
+│       └── transformer_attention.png            # Transformer feature attention heatmap
 │
-├── test_traffic.csv                     # Sample test traffic CSV (ready to upload)
-├── cybershield_mixed_traffic.csv        # Mixed attack test traffic CSV
-│
-├── overall_system_metrics.csv           # Global benchmark statistics
-├── per_class_evaluation_matrix.csv      # Detailed per-class precision, recall, F1
-├── ae_detection_performance.csv         # Autoencoder anomaly evaluation metrics
-├── ae_confusion_matrix_breakdown.csv    # AE confusion matrix values
-├── ae_reconstruction_error_stats.csv    # Reconstruction error quantiles
-├── ae_training_summary.csv              # AE training epoch logs
-├── cvae_loss_matrix.csv                 # CVAE MSE & KL divergence progression
-│
-├── ae_diagnostics_dashboard.png         # AE diagnostic visualizations
-├── cvae_diagnostics_dashboard.png       # CVAE training & distribution plots
-├── intrusion_classifier_confusion_matrix.png # Multi-class confusion matrix plot
-├── transformer_attention.png            # Transformer feature attention heatmap
-│
+├── run_app.py                           # Quick launcher for Ember Shield GUI
 ├── requirements.txt                     # Python package dependencies
 ├── .gitignore                           # Git ignore rules
 └── README.md                            # Comprehensive project documentation
 ```
 
-> **Note on `rf_model.pkl`:** The Random Forest checkpoint (~754 MB) used in the secondary CVAE experimental pipeline exceeds GitHub's 100 MB hard file upload limit. It is excluded from the Git tree via `.gitignore`. The primary pipeline (**Autoencoder + CyberTransformer**) is fully self-contained with bundled weights (`cybershield_ae.pth` and `cybershield_transformer.pth`). If you wish to use the Random Forest pipeline locally, you can easily train and export `rf_model.pkl` in minutes by running [`cybershield-vae-model.ipynb`](cybershield-vae-model.ipynb).
+> **Note on `rf_model.pkl`:** The Random Forest checkpoint (~754 MB) used in the secondary CVAE experimental pipeline exceeds GitHub's 100 MB hard file upload limit. It is excluded from the Git tree via `.gitignore`. The primary pipeline (**Autoencoder + CyberTransformer**) is fully self-contained with bundled weights (`models/cybershield_ae.pth` and `models/cybershield_transformer.pth`). If you wish to use the Random Forest pipeline locally, you can easily train and export `rf_model.pkl` in minutes by running [`notebooks/cybershield-vae-model.ipynb`](notebooks/cybershield-vae-model.ipynb).
 
 ---
 
@@ -245,8 +252,13 @@ pip install -r requirements.txt
 ```
 
 ### 4. Launch the Ember Shield Dashboard
+Run via Streamlit:
 ```bash
-streamlit run cybershield_app.py
+streamlit run app/cybershield_app.py
+```
+Or use the launcher script:
+```bash
+python run_app.py
 ```
 Open your browser at `http://localhost:8501` to view the live dashboard.
 
@@ -257,18 +269,18 @@ Open your browser at `http://localhost:8501` to view the live dashboard.
 You can immediately test the detection engine using either the provided sample datasets or the traffic generators:
 
 ### Method A: Use Pre-generated CSVs
-In the Streamlit sidebar, select **"Upload Traffic CSV"** and pick:
-- `test_traffic.csv` (contains a mix of Benign, DDoS, DoS, PortScan, and Brute Force flows)
-- `cybershield_mixed_traffic.csv` (contains multi-class attack profiles)
+In the Streamlit sidebar, select **"Upload Traffic CSV"** and browse into `data/`:
+- `data/test_traffic.csv` (contains a mix of Benign, DDoS, DoS, PortScan, and Brute Force flows)
+- `data/cybershield_mixed_traffic.csv` (contains multi-class attack profiles)
 
 ### Method B: Generate Fresh Test Traffic
-Run the standalone data generation scripts to create new synthetic packets adhering to the 77 CICIDS feature specifications:
+Run the standalone data generation scripts in `scripts/`:
 ```bash
 # Generate 50 realistic CICIDS 2017 flows with metadata
-python generate_test_csv.py
+python scripts/generate_test_csv.py
 
 # Generate a balanced dataset across all attack profiles
-python generate_balanced_csv.py
+python scripts/generate_balanced_csv.py
 ```
 
 ---

@@ -1,3 +1,4 @@
+import os
 import joblib
 import torch
 import numpy as np
@@ -8,11 +9,25 @@ warnings.filterwarnings("ignore")
 
 print("Initializing fast mixed dataset builder...")
 
+def resolve_file(folder: str, filename: str) -> str:
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    candidates = [
+        os.path.join(script_dir, "..", folder, filename),
+        os.path.join(script_dir, folder, filename),
+        os.path.join(script_dir, filename),
+        os.path.join(os.getcwd(), folder, filename),
+        os.path.join(os.getcwd(), filename),
+    ]
+    for p in candidates:
+        if os.path.exists(p):
+            return os.path.abspath(p)
+    return os.path.abspath(os.path.join(script_dir, "..", folder, filename))
+
 # 1. Load models
 device = torch.device('cpu')
-ae_ckpt = torch.load('cybershield_ae.pth', map_location=device, weights_only=False)
+ae_ckpt = torch.load(resolve_file('models', 'cybershield_ae.pth'), map_location=device, weights_only=False)
 ae_threshold = float(ae_ckpt['threshold'])
-ae_scaler = joblib.load('ae_scaler.pkl')
+ae_scaler = joblib.load(resolve_file('models', 'ae_scaler.pkl'))
 
 class TabularAutoencoder(nn.Module):
     def __init__(self, input_dim: int, bottleneck: int = 16):
@@ -36,12 +51,12 @@ ae_model = TabularAutoencoder(input_dim=77, bottleneck=16)
 ae_model.load_state_dict(ae_ckpt['model_state_dict'])
 ae_model.eval()
 
-vae_scaler = joblib.load('scaler.pkl')
-rf_model = joblib.load('rf_model.pkl')
-vae_le = joblib.load('label_encoder.pkl')
+vae_scaler = joblib.load(resolve_file('models', 'scaler.pkl'))
+rf_model = joblib.load(resolve_file('models', 'rf_model.pkl'))
+vae_le = joblib.load(resolve_file('models', 'label_encoder.pkl'))
 vae_classes = [c.encode('ascii', 'ignore').decode() for c in vae_le.classes_]
 
-df_ref = pd.read_csv('test_traffic.csv')
+df_ref = pd.read_csv(resolve_file('data', 'test_traffic.csv'))
 feature_cols = [c for c in df_ref.columns if c not in [
     'Flow ID', 'Source IP', 'Source Port', 'Destination IP', 'Destination Port', 'Timestamp', 'Label', 'Unnamed: 0'
 ]]
@@ -127,9 +142,11 @@ df_out.insert(5, "Timestamp", timestamps)
 df_out["Label"] = shuffled_labels
 
 # Save files
-df_out.to_csv("cybershield_mixed_traffic.csv", index=False)
-df_out.to_csv("test_traffic.csv", index=False)
-print(f"Saved {len(df_out)} rows to cybershield_mixed_traffic.csv and test_traffic.csv!")
+out_mixed = resolve_file("data", "cybershield_mixed_traffic.csv")
+out_test = resolve_file("data", "test_traffic.csv")
+df_out.to_csv(out_mixed, index=False)
+df_out.to_csv(out_test, index=False)
+print(f"Saved {len(df_out)} rows to {out_mixed} and {out_test}!")
 
 # Verify through RF
 x_vae = vae_scaler.transform(df_out[feature_cols].values)

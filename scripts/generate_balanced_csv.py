@@ -1,3 +1,4 @@
+import os
 import joblib
 import torch
 import numpy as np
@@ -6,11 +7,25 @@ import torch.nn as nn
 import warnings
 warnings.filterwarnings("ignore")
 
+def resolve_file(folder: str, filename: str) -> str:
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    candidates = [
+        os.path.join(script_dir, "..", folder, filename),
+        os.path.join(script_dir, folder, filename),
+        os.path.join(script_dir, filename),
+        os.path.join(os.getcwd(), folder, filename),
+        os.path.join(os.getcwd(), filename),
+    ]
+    for p in candidates:
+        if os.path.exists(p):
+            return os.path.abspath(p)
+    return os.path.abspath(os.path.join(script_dir, "..", folder, filename))
+
 # 1. Load models and preprocessors
 device = torch.device('cpu')
-ae_ckpt = torch.load('cybershield_ae.pth', map_location=device, weights_only=False)
+ae_ckpt = torch.load(resolve_file('models', 'cybershield_ae.pth'), map_location=device, weights_only=False)
 ae_threshold = float(ae_ckpt['threshold'])
-ae_scaler = joblib.load('ae_scaler.pkl')
+ae_scaler = joblib.load(resolve_file('models', 'ae_scaler.pkl'))
 
 class TabularAutoencoder(nn.Module):
     def __init__(self, input_dim: int, bottleneck: int = 16):
@@ -34,13 +49,13 @@ ae_model = TabularAutoencoder(input_dim=77, bottleneck=16)
 ae_model.load_state_dict(ae_ckpt['model_state_dict'])
 ae_model.eval()
 
-vae_scaler = joblib.load('scaler.pkl')
-rf_model = joblib.load('rf_model.pkl')
-vae_le = joblib.load('label_encoder.pkl')
+vae_scaler = joblib.load(resolve_file('models', 'scaler.pkl'))
+rf_model = joblib.load(resolve_file('models', 'rf_model.pkl'))
+vae_le = joblib.load(resolve_file('models', 'label_encoder.pkl'))
 vae_classes = [c.encode('ascii', 'ignore').decode() for c in vae_le.classes_]
 
 # Feature names from CICIDS 2017
-df_ref = pd.read_csv('test_traffic.csv')
+df_ref = pd.read_csv(resolve_file('data', 'test_traffic.csv'))
 feature_cols = [c for c in df_ref.columns if c not in [
     'Flow ID', 'Source IP', 'Source Port', 'Destination IP', 'Destination Port', 'Timestamp', 'Label', 'Unnamed: 0'
 ]]
@@ -135,7 +150,7 @@ df_out.insert(4, "Destination Port", dst_ports)
 df_out.insert(5, "Timestamp", timestamps)
 df_out["Label"] = shuffled_labels
 
-output_csv = "cybershield_mixed_traffic.csv"
+output_csv = resolve_file("data", "cybershield_mixed_traffic.csv")
 df_out.to_csv(output_csv, index=False)
 print(f"\nSaved mixed dataset to {output_csv} ({len(df_out)} packets)")
 
@@ -175,5 +190,6 @@ for target_cls in ['BENIGN', 'DDoS', 'PortScan', 'DoS Hulk', 'Bot']:
         print(f"  - {target_cls:<12} error: mean={sub_errs.mean():.4f}, min={sub_errs.min():.4f}, max={sub_errs.max():.4f}")
 
 # Overwrite test_traffic.csv as well so both files are updated
-df_out.to_csv("test_traffic.csv", index=False)
-print("\nUpdated test_traffic.csv as well!")
+test_traffic_path = resolve_file("data", "test_traffic.csv")
+df_out.to_csv(test_traffic_path, index=False)
+print(f"\nUpdated {test_traffic_path} as well!")

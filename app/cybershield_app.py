@@ -787,17 +787,32 @@ class CyberTransformer(nn.Module):
 
 
 # ── Load Models ───────────────────────────────────────────────────────────
+def resolve_model_file(filename: str) -> str:
+    """Find a model or preprocessor file in models/, ../models/, current dir, or workspace."""
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    candidates = [
+        os.path.join(base_dir, "..", "models", filename),
+        os.path.join(base_dir, "models", filename),
+        os.path.join(base_dir, filename),
+        os.path.join(os.getcwd(), "models", filename),
+        os.path.join(os.getcwd(), filename),
+    ]
+    for p in candidates:
+        if os.path.isfile(p):
+            return os.path.abspath(p)
+    return os.path.abspath(os.path.join(base_dir, "..", "models", filename))
+
+
 @st.cache_resource
 def load_models():
     device = torch.device("cpu")
 
-    # Resolve paths relative to this script
-    base_dir = os.path.dirname(os.path.abspath(__file__))
-
     # Load AE
-    ae_ckpt    = torch.load(os.path.join(base_dir, "cybershield_ae.pth"), map_location=device, weights_only=False)
-    ae_scaler  = joblib.load(os.path.join(base_dir, "ae_scaler.pkl"))
-    ae_model   = TabularAutoencoder(
+    ae_path        = resolve_model_file("cybershield_ae.pth")
+    ae_scaler_path = resolve_model_file("ae_scaler.pkl")
+    ae_ckpt        = torch.load(ae_path, map_location=device, weights_only=False)
+    ae_scaler      = joblib.load(ae_scaler_path)
+    ae_model       = TabularAutoencoder(
         input_dim  = ae_ckpt['input_dim'],
         bottleneck = ae_ckpt.get('bottleneck', 16)
     )
@@ -806,10 +821,13 @@ def load_models():
     ae_threshold = ae_ckpt['threshold']
 
     # Load Transformer
-    tr_ckpt    = torch.load(os.path.join(base_dir, "cybershield_transformer.pth"), map_location=device, weights_only=False)
-    tr_scaler  = joblib.load(os.path.join(base_dir, "transformer_scaler.pkl"))
-    tr_le      = joblib.load(os.path.join(base_dir, "transformer_label_encoder.pkl"))
-    tr_model   = CyberTransformer(
+    tr_path        = resolve_model_file("cybershield_transformer.pth")
+    tr_scaler_path = resolve_model_file("transformer_scaler.pkl")
+    tr_le_path     = resolve_model_file("transformer_label_encoder.pkl")
+    tr_ckpt        = torch.load(tr_path, map_location=device, weights_only=False)
+    tr_scaler      = joblib.load(tr_scaler_path)
+    tr_le          = joblib.load(tr_le_path)
+    tr_model       = CyberTransformer(
         input_dim   = tr_ckpt['input_dim'],
         num_classes = tr_ckpt['num_classes'],
         d_model     = tr_ckpt.get('d_model', 64),
@@ -827,11 +845,9 @@ def load_models():
 @st.cache_resource
 def load_vae_models():
     """Load the VAE pipeline: StandardScaler + LabelEncoder + Random Forest classifier."""
-    base_dir = os.path.dirname(os.path.abspath(__file__))
-
-    vae_scaler = joblib.load(os.path.join(base_dir, "scaler.pkl"))
-    vae_le     = joblib.load(os.path.join(base_dir, "label_encoder.pkl"))
-    rf_model   = joblib.load(os.path.join(base_dir, "rf_model.pkl"))
+    vae_scaler = joblib.load(resolve_model_file("scaler.pkl"))
+    vae_le     = joblib.load(resolve_model_file("label_encoder.pkl"))
+    rf_model   = joblib.load(resolve_model_file("rf_model.pkl"))
     vae_class_names = list(vae_le.classes_)
 
     return rf_model, vae_scaler, vae_le, vae_class_names

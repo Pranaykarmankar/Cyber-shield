@@ -9,11 +9,18 @@ The CSV includes metadata columns (Flow ID, Source IP, etc.)
 that the app will automatically drop before inference.
 """
 
+import sys
 import numpy as np
 import pandas as pd
 import joblib
 import warnings
 warnings.filterwarnings("ignore")
+
+if sys.stdout.encoding != 'utf-8':
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+    except Exception:
+        pass
 
 # ── CICIDS 2017 Feature Names (77 features, in standard order) ──────────
 FEATURE_NAMES = [
@@ -46,7 +53,7 @@ FEATURE_NAMES = [
     "Idle Max", "Idle Min",
 ]
 
-assert len(FEATURE_NAMES) == 77, f"Expected 77 features, got {len(FEATURE_NAMES)}"
+assert len(FEATURE_NAMES) == 78, f"Expected 78 columns (Destination Port + 77 features), got {len(FEATURE_NAMES)}"
 
 np.random.seed(2024)
 
@@ -339,7 +346,11 @@ df.insert(4, "Timestamp", timestamps)
 df["Label"] = labels
 
 # ── Save ────────────────────────────────────────────────────────────────
-output_path = "test_traffic.csv"
+import os
+data_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data")
+if not os.path.exists(data_dir):
+    data_dir = "."
+output_path = os.path.join(data_dir, "test_traffic.csv")
 df.to_csv(output_path, index=False)
 
 # ── Summary ─────────────────────────────────────────────────────────────
