@@ -196,6 +196,7 @@ Cyber-shield/
 │   ├── cybershield_wgan.pth             # Trained WGAN-GP generator & critic checkpoint
 │   ├── cybershield_ctgan.pkl            # Trained CTGAN tabular synthesizer
 │   ├── cybershield_diffusion.pth        # Trained Conditional Diffusion U-Net model
+│   ├── diffusion_class_names.pkl        # 12-Class attack label mapping for Diffusion
 │   ├── gan_scaler.pkl                   # StandardScaler fitted for GAN generator
 │   ├── gan_label_encoder.pkl            # LabelEncoder mapping attack classes
 │   ├── scaler.pkl                       # StandardScaler for VAE/RF pipeline
@@ -213,7 +214,9 @@ Cyber-shield/
 │   ├── test_traffic.csv                 # Sample test traffic CSV (ready to upload)
 │   ├── cybershield_mixed_traffic.csv    # Mixed attack test traffic CSV
 │   ├── wgan_synthetic_attacks.csv       # Pre-generated WGAN-GP synthetic attack dataset
-│   └── ctgan_synthetic_attacks.csv      # Pre-generated CTGAN synthetic attack dataset
+│   ├── ctgan_synthetic_attacks.csv      # Pre-generated CTGAN synthetic attack dataset
+│   ├── diffusion_generated_heatmaps.npy # Pre-computed 64x64 DDPM synthetic flow heatmaps
+│   └── diffusion_generated_labels.npy   # Class label indices for diffusion heatmaps
 │
 ├── scripts/                             # Utility & synthetic data generation scripts
 │   ├── generate_test_csv.py             # Generates 50 realistic CICIDS 2017 test packets
@@ -229,13 +232,18 @@ Cyber-shield/
 │   │   ├── ae_reconstruction_error_stats.csv# Reconstruction error quantiles
 │   │   ├── ae_training_summary.csv          # AE training epoch logs
 │   │   ├── cvae_loss_matrix.csv             # CVAE MSE & KL divergence progression
-│   │   └── gan_comparison.csv               # WGAN vs CTGAN statistical benchmark
+│   │   ├── gan_comparison.csv               # WGAN vs CTGAN statistical benchmark
+│   │   ├── diffusion_comparison.csv         # Diffusion FID & SSIM benchmarking metrics
+│   │   └── diffusion_loss_history.csv       # Diffusion training & validation MSE trajectories
 │   └── figures/                         # Evaluation charts and dashboards
 │       ├── ae_diagnostics_dashboard.png         # AE diagnostic visualizations
 │       ├── cvae_diagnostics_dashboard.png       # CVAE training & distribution plots
 │       ├── intrusion_classifier_confusion_matrix.png # Multi-class confusion matrix plot
 │       ├── transformer_attention.png            # Transformer feature attention heatmap
-│       └── gan_dashboard.png                    # GAN evaluation dashboard
+│       ├── gan_dashboard.png                    # GAN evaluation dashboard
+│       ├── diffusion_dashboard.png              # Diffusion multi-panel generation dashboard
+│       └── text_to_heatmap_demo.png             # Text-to-flow heatmap synthesis comparison
+
 │
 ├── run_app.py                           # Quick launcher for Ember Shield SOC GUI
 ├── run_diffusion_gui.py                 # Quick launcher for Diffusion & Generative Studio

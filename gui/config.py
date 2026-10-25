@@ -29,14 +29,15 @@ GAN_COMPARISON_CSV = resolve_path("evaluations/metrics/gan_comparison.csv", "gan
 GAN_DASHBOARD_PNG = resolve_path("evaluations/figures/gan_dashboard.png", "gan_dashboard.png")
 
 # Diffusion Model and Artifact Paths
-DIFFUSION_CKPT_PATH = resolve_path("models/cybershield_diffusion.pth", "cybershield_diffusion.pth", "cybershield_diffusion (1).pth")
-DIFFUSION_CLASS_NAMES_PATH = resolve_path("diffusion_class_names.pkl", "models/diffusion_class_names.pkl")
-DIFFUSION_COMPARISON_CSV = resolve_path("diffusion_comparison.csv", "evaluations/metrics/diffusion_comparison.csv")
-DIFFUSION_LOSS_HISTORY_CSV = resolve_path("diffusion_loss_history.csv", "evaluations/metrics/diffusion_loss_history.csv")
-DIFFUSION_HEATMAPS_PATH = resolve_path("diffusion_generated_heatmaps.npy", "data/diffusion_generated_heatmaps.npy")
-DIFFUSION_LABELS_PATH = resolve_path("diffusion_generated_labels.npy", "data/diffusion_generated_labels.npy")
-DIFFUSION_DASHBOARD_PNG = resolve_path("diffusion_dashboard.png", "evaluations/figures/diffusion_dashboard.png")
-TEXT_TO_HEATMAP_DEMO_PNG = resolve_path("text_to_heatmap_demo.png", "evaluations/figures/text_to_heatmap_demo.png")
+DIFFUSION_CKPT_PATH = resolve_path("models/cybershield_diffusion.pth", "cybershield_diffusion.pth")
+DIFFUSION_CLASS_NAMES_PATH = resolve_path("models/diffusion_class_names.pkl", "diffusion_class_names.pkl")
+DIFFUSION_COMPARISON_CSV = resolve_path("evaluations/metrics/diffusion_comparison.csv", "diffusion_comparison.csv")
+DIFFUSION_LOSS_HISTORY_CSV = resolve_path("evaluations/metrics/diffusion_loss_history.csv", "diffusion_loss_history.csv")
+DIFFUSION_HEATMAPS_PATH = resolve_path("data/diffusion_generated_heatmaps.npy", "diffusion_generated_heatmaps.npy")
+DIFFUSION_LABELS_PATH = resolve_path("data/diffusion_generated_labels.npy", "diffusion_generated_labels.npy")
+DIFFUSION_DASHBOARD_PNG = resolve_path("evaluations/figures/diffusion_dashboard.png", "diffusion_dashboard.png")
+TEXT_TO_HEATMAP_DEMO_PNG = resolve_path("evaluations/figures/text_to_heatmap_demo.png", "text_to_heatmap_demo.png")
+
 
 WGAN_SYNTHETIC_CSV = resolve_path("data/wgan_synthetic_attacks.csv", "wgan_synthetic_attacks.csv")
 CTGAN_SYNTHETIC_CSV = resolve_path("data/ctgan_synthetic_attacks.csv", "ctgan_synthetic_attacks.csv")
