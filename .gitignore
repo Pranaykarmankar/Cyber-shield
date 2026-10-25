@@ -25,8 +25,11 @@ Thumbs.db
 # Scratch and temporary scripts
 scratch_*
 *.tmp
+archive/
+CyberShield_Threat_Report_*.html
 
 # Model checkpoint exceeding GitHub 100MB limit
 # rf_model.pkl (~754MB) is trained via cybershield-vae-model.ipynb
 # The primary AE + CyberTransformer pipeline is fully included.
 rf_model.pkl
+

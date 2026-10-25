@@ -176,6 +176,15 @@ Cyber-shield/
 ├── app/                                 # Dashboard application
 │   └── cybershield_app.py               # Ember Shield Streamlit GUI application (v3.0)
 │
+├── gui/                                 # Generative Defense & Diffusion Studio Suite
+│   ├── app.py                           # Multi-page Streamlit GUI entrypoint
+│   ├── diffusion_gradio_app.py          # Standalone Gradio text-to-heatmap studio
+│   ├── config.py                        # Centralized paths and telemetry mappings
+│   ├── models.py                        # PyTorch architectures (Generator, Critic, CondUNet)
+│   ├── inference.py                     # Adversarial stress test & generative pipeline
+│   ├── components.py                    # Cyberpunk glassmorphism design system
+│   └── pages/                           # 6 interactive operational pages
+│
 ├── models/                              # Trained AI models & preprocessors
 │   ├── cybershield_ae.pth               # Trained Autoencoder PyTorch weights
 │   ├── best_ae.pth                      # Best Autoencoder checkpoint
@@ -184,6 +193,11 @@ Cyber-shield/
 │   ├── best_transformer.pth             # Best CyberTransformer checkpoint
 │   ├── transformer_scaler.pkl           # StandardScaler fitted for Transformer
 │   ├── transformer_label_encoder.pkl    # LabelEncoder mapping 15 attack classes
+│   ├── cybershield_wgan.pth             # Trained WGAN-GP generator & critic checkpoint
+│   ├── cybershield_ctgan.pkl            # Trained CTGAN tabular synthesizer
+│   ├── cybershield_diffusion.pth        # Trained Conditional Diffusion U-Net model
+│   ├── gan_scaler.pkl                   # StandardScaler fitted for GAN generator
+│   ├── gan_label_encoder.pkl            # LabelEncoder mapping attack classes
 │   ├── scaler.pkl                       # StandardScaler for VAE/RF pipeline
 │   ├── label_encoder.pkl                # LabelEncoder for VAE/RF pipeline
 │   └── rf_model.pkl                     # Local Random Forest model (gitignored due to size)
@@ -191,11 +205,15 @@ Cyber-shield/
 ├── notebooks/                           # Model research and training notebooks
 │   ├── autoencoder.ipynb                # PyTorch Tabular Autoencoder training notebook
 │   ├── transformer.ipynb                # PyTorch CyberTransformer training notebook
-│   └── cybershield-vae-model.ipynb      # CVAE Generative Model & Random Forest notebook
+│   ├── cybershield-vae-model.ipynb      # CVAE Generative Model & Random Forest notebook
+│   ├── gan.ipynb                        # WGAN-GP & CTGAN adversarial research notebook
+│   └── diffusion-cyber.ipynb            # Score-based Diffusion text-to-heatmap notebook
 │
 ├── data/                                # Sample datasets for evaluation & testing
 │   ├── test_traffic.csv                 # Sample test traffic CSV (ready to upload)
-│   └── cybershield_mixed_traffic.csv    # Mixed attack test traffic CSV
+│   ├── cybershield_mixed_traffic.csv    # Mixed attack test traffic CSV
+│   ├── wgan_synthetic_attacks.csv       # Pre-generated WGAN-GP synthetic attack dataset
+│   └── ctgan_synthetic_attacks.csv      # Pre-generated CTGAN synthetic attack dataset
 │
 ├── scripts/                             # Utility & synthetic data generation scripts
 │   ├── generate_test_csv.py             # Generates 50 realistic CICIDS 2017 test packets
@@ -210,14 +228,17 @@ Cyber-shield/
 │   │   ├── ae_confusion_matrix_breakdown.csv# AE confusion matrix values
 │   │   ├── ae_reconstruction_error_stats.csv# Reconstruction error quantiles
 │   │   ├── ae_training_summary.csv          # AE training epoch logs
-│   │   └── cvae_loss_matrix.csv             # CVAE MSE & KL divergence progression
+│   │   ├── cvae_loss_matrix.csv             # CVAE MSE & KL divergence progression
+│   │   └── gan_comparison.csv               # WGAN vs CTGAN statistical benchmark
 │   └── figures/                         # Evaluation charts and dashboards
 │       ├── ae_diagnostics_dashboard.png         # AE diagnostic visualizations
 │       ├── cvae_diagnostics_dashboard.png       # CVAE training & distribution plots
 │       ├── intrusion_classifier_confusion_matrix.png # Multi-class confusion matrix plot
-│       └── transformer_attention.png            # Transformer feature attention heatmap
+│       ├── transformer_attention.png            # Transformer feature attention heatmap
+│       └── gan_dashboard.png                    # GAN evaluation dashboard
 │
-├── run_app.py                           # Quick launcher for Ember Shield GUI
+├── run_app.py                           # Quick launcher for Ember Shield SOC GUI
+├── run_diffusion_gui.py                 # Quick launcher for Diffusion & Generative Studio
 ├── requirements.txt                     # Python package dependencies
 ├── .gitignore                           # Git ignore rules
 └── README.md                            # Comprehensive project documentation

@@ -1,0 +1,11 @@
+Metric,Diffusion,Real test
+Training MSE ↓ (final),0.01195,-
+Validation MSE ↓ (final),0.01361,-
+Validation MAE/L1 ↓ (final),0.03961,-
+FID ↓,36.85,0.0
+SSIM ↑ (vs class-avg real),0.5294,0.714
+PSNR ↑ dB (vs class-avg real),16.12,18.66
+CLIP Score ↑ (matched prompt),23.88,-
+CLIP Score (mismatched prompt),23.93,-
+Class accuracy ↑ (generated),0.4146,-
+"Class accuracy (real test, ceiling)",0.9525,0.9525

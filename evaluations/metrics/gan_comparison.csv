@@ -1,0 +1,3 @@
+Model,KS Score ↓,Mean Diff ↓,Std Diff ↓,Samples
+WGAN-GP,0.4006,0.0136,0.1407,4994
+CTGAN,0.3718,0.0664,0.0345,5000
